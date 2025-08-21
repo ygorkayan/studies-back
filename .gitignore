@@ -1,3 +1,57 @@
-/.node_modules
-/.wrangler
-/.vscode
+/node_modules
+
+# Build outputs
+dist/
+build/
+coverage/
+.turbo/
+
+# CF Workers / Wrangler (already present but keep explicit)
+.wrangler
+
+# IDE / Editor
+.vscode
+.idea
+
+# OS / Misc
+.DS_Store
+Thumbs.db
+
+# Logs & runtime data
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# TypeScript
+*.tsbuildinfo
+
+# Caches
+.eslintcache
+.parcel-cache
+.cache
+.npm
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+node_modules/.cache
+
+# Testing
+.nyc_output
+
+# Hosting / Deploy
+.vercel
+.netlify
+
+# Lockfiles (optional ignore if using a single manager; comment out what you keep tracked)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
