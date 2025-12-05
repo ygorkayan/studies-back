@@ -1,7 +1,17 @@
+import { question } from "./question";
+
 export const routeHandler = async (req: Request, env: Env) => {
-  const url = new URL(req.url);
-  //console.log("url", url?.pathname);
+  const pathname = new URL(req.url).pathname;
+  const method = req.method;
 
+  const methodsAllowedInQuestion = ["GET", "PUT"];
 
-  return { test: "test" };
+  if (pathname.startsWith("/question") && methodsAllowedInQuestion.includes(method)) {
+    return question(method, req);
+  }
+
+  return {
+    status: 404,
+    body: "Not Found",
+  };
 };
