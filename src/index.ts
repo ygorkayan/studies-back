@@ -75,8 +75,33 @@ export class MyWorkflow extends WorkflowEntrypoint<Env, Params> {
   }
 }
 
+const corsHeaders = (origin: string) => {
+  const allowedOrigins = ["http://localhost:5173", "https://studies-front.pages.dev"];
+
+  return {
+    "Access-Control-Allow-Origin": allowedOrigins.includes(origin) ? origin : "",
+    "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  };
+};
+
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
-    return Response.json(await routeHandler(req, env));
+    const origin = req.headers.get("Origin");
+    const headers = corsHeaders(origin || "");
+
+    if (req.method === "OPTIONS") {
+      return new Response(null, { headers });
+    }
+
+    const result = await routeHandler(req, env);
+
+    return new Response(JSON.stringify(result?.body), {
+      status: result?.status,
+      headers: {
+        "Content-Type": "application/json",
+        ...headers,
+      },
+    });
   },
 };
