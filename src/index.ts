@@ -78,11 +78,16 @@ export class MyWorkflow extends WorkflowEntrypoint<Env, Params> {
 const corsHeaders = (origin: string) => {
   const allowedOrigins = ["http://localhost:5173", "https://studies-front.pages.dev"];
 
-  return {
-    "Access-Control-Allow-Origin": allowedOrigins.includes(origin) ? origin : "",
+  const headers: Record<string, string> = {
     "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
   };
+
+  if (allowedOrigins.includes(origin)) {
+    headers["Access-Control-Allow-Origin"] = origin;
+  }
+
+  return headers;
 };
 
 export default {
@@ -96,8 +101,8 @@ export default {
 
     const result = await routeHandler(req, env);
 
-    return new Response(JSON.stringify(result?.body), {
-      status: result?.status,
+    return new Response(JSON.stringify(result), {
+      status: result?.status || 500,
       headers: {
         "Content-Type": "application/json",
         ...headers,
