@@ -1,7 +1,7 @@
 import { env } from "cloudflare:workers";
 
 export const getQuestion = async () => {
-  const query = "select question, answer from flash_cards order by controller LIMIT 1";
+  const query = "select id, question, answer from flash_cards order by controller LIMIT 1";
 
   const result = await env.studies_back.prepare(query).all();
 
