@@ -32,7 +32,7 @@ export const putQuestion = async (req: Request, body: Record<string, any> | null
     };
   }
 
-  let controller = result.results[0].controller;
+  let controller = result.results[0].controller as number;
 
   let data;
   let answer: "correct" | "incorrect";
