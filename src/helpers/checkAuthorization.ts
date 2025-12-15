@@ -7,7 +7,13 @@ export const checkAuthorization = async (body: Record<string, any> | null): Prom
     return false;
   }
 
-  const data: Token = await decrypt(body.token);
+  let data: Token;
+
+  try {
+    data = await decrypt(body.token);
+  } catch (e) {
+    return false;
+  }
 
   const now = Date.now();
 
@@ -17,7 +23,12 @@ export const checkAuthorization = async (body: Record<string, any> | null): Prom
 
   const queryToGetUser = "select id, user from users where id = ? AND user = ?";
 
-  const result = await env.studies_back.prepare(queryToGetUser).bind(data.userId, data.user).all();
+  let result;
+  try {
+    result = await env.studies_back.prepare(queryToGetUser).bind(data.userId, data.user).all();
+  } catch (error) {
+    return false;
+  }
 
   if (result.results?.length === 0) {
     return false;

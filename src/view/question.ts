@@ -14,7 +14,7 @@ export const question = async (method: string, req: Request) => {
   }
 
   if (!allowed) {
-    return new Response("Unauthorized", { status: 401 });
+    return { status: 401, body: "Unauthorized" };
   }
 
   if (method === "GET") {

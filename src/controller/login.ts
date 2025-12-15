@@ -47,8 +47,15 @@ export const checkLogin = async (req: Request) => {
     expiration: Date.now() + FIVE_HOURS_IN_MS,
   };
 
-  return {
-    status: 200,
-    body: await encrypt(token),
-  };
+  try {
+    return {
+      status: 200,
+      body: await encrypt(token),
+    };
+  } catch (error) {
+    return {
+      status: 500,
+      body: "Failed to generate token",
+    };
+  }
 };
