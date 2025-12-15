@@ -1,11 +1,16 @@
+import { login } from "./login";
 import { question } from "./question";
 
-export const routeHandler = async (req: Request, env: Env) => {
+export const routeHandler = async (req: Request) => {
   const pathname = new URL(req.url).pathname;
   const method = req.method;
 
-  const methodsAllowedInQuestion = ["GET", "PUT"];
+  const methodsAllowedInLogin = ["GET"];
+  if (pathname.startsWith("/login") && methodsAllowedInLogin.includes(method)) {
+    return login(method, req);
+  }
 
+  const methodsAllowedInQuestion = ["GET", "PUT"];
   if (pathname.startsWith("/question") && methodsAllowedInQuestion.includes(method)) {
     return question(method, req);
   }

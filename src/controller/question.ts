@@ -11,7 +11,7 @@ export const getQuestion = async () => {
   };
 };
 
-export const putQuestion = async (req: Request) => {
+export const putQuestion = async (req: Request, body: Record<string, any> | null) => {
   const idString = new URL(req.url).pathname.replace(/^\/question\//, "");
   const id = Number(idString);
 
@@ -38,7 +38,7 @@ export const putQuestion = async (req: Request) => {
   let answer: "correct" | "incorrect";
 
   try {
-    data = (await req.json()) as Record<string, "correct" | "incorrect">;
+    data = body as Record<string, "correct" | "incorrect">;
     answer = data.answer;
   } catch (error) {
     return {

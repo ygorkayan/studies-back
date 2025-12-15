@@ -99,7 +99,7 @@ export default {
       return new Response(null, { headers });
     }
 
-    const result = await routeHandler(req, env);
+    const result = await routeHandler(req);
 
     return new Response(JSON.stringify(result), {
       status: result?.status || 500,
