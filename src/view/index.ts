@@ -10,7 +10,7 @@ export const routeHandler = async (req: Request) => {
     return login(method, req);
   }
 
-  const methodsAllowedInQuestion = ["GET", "PUT"];
+  const methodsAllowedInQuestion = ["POST", "PUT"];
   if (pathname.startsWith("/question") && methodsAllowedInQuestion.includes(method)) {
     return question(method, req);
   }
