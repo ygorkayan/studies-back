@@ -17,7 +17,7 @@ export const question = async (method: string, req: Request) => {
     return { status: 401, body: "Unauthorized" };
   }
 
-  if (method === "GET") {
+  if (method === "POST") {
     return getQuestion();
   }
 
