@@ -80,7 +80,7 @@ const corsHeaders = (origin: string) => {
 
   const headers: Record<string, string> = {
     "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Allow-Headers": "Content-Type, token",
   };
 
   if (allowedOrigins.includes(origin)) {
