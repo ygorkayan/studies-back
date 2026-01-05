@@ -11,7 +11,7 @@ export const getQuestion = async () => {
   };
 };
 
-export const putQuestion = async (req: Request, body: Record<string, any> | null) => {
+export const putQuestion = async (req: Request) => {
   const idString = new URL(req.url).pathname.replace(/^\/question\//, "");
   const id = Number(idString);
 
@@ -22,7 +22,7 @@ export const putQuestion = async (req: Request, body: Record<string, any> | null
     };
   }
 
-  const queryToGet = "select controller from flash_cards where id = ?";
+  const queryToGet = "select question, answer, controller from flash_cards where id = ?";
   const result = await env.studies_back.prepare(queryToGet).bind(id).all();
 
   if (!result.results || result.results.length === 0) {
@@ -32,14 +32,10 @@ export const putQuestion = async (req: Request, body: Record<string, any> | null
     };
   }
 
-  let controller = result.results[0].controller as number;
-
-  let data;
-  let answer: "correct" | "incorrect";
+  let body: Record<string, any> | null;
 
   try {
-    data = body as Record<string, "correct" | "incorrect">;
-    answer = data.answer;
+    body = await req.json();
   } catch (error) {
     return {
       status: 400,
@@ -47,26 +43,28 @@ export const putQuestion = async (req: Request, body: Record<string, any> | null
     };
   }
 
-  if (answer !== "correct" && answer !== "incorrect") {
-    return {
-      status: 400,
-      body: "Invalid answer value",
-    };
-  }
+  const oldQuestion = result.results[0].question as string;
+  const oldAnswer = result.results[0].answer as string;
 
-  if (answer === "correct") {
-    controller = controller + 1;
-  } else if (answer === "incorrect" && controller > 0) {
-    controller = controller - 1;
+  const newQuestion = body?.question ?? oldQuestion;
+  const newAnswer = body?.answer ?? oldAnswer;
+  let newController = result.results[0].controller as number;
+
+  const bodyController = body?.controller;
+
+  if (bodyController === "correct") {
+    newController += 1;
+  } else if (bodyController === "incorrect" && newController > 0) {
+    newController -= 1;
   }
 
   const queryToUpdate = `
     UPDATE flash_cards
-    SET controller = ?
+    SET question = ?, answer = ?, controller = ?
     WHERE id = ?;
   `;
 
-  const update = await env.studies_back.prepare(queryToUpdate).bind(controller, id).all();
+  const update = await env.studies_back.prepare(queryToUpdate).bind(newQuestion, newAnswer, newController, id).all();
 
   if (update.success) {
     return {
