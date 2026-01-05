@@ -2,15 +2,15 @@ import { decrypt } from "./crypto";
 import { Token } from "./types";
 import { env } from "cloudflare:workers";
 
-export const checkAuthorization = async (body: Record<string, any> | null): Promise<boolean> => {
-  if (!body?.token) {
+export const checkAuthorization = async (token: string | null): Promise<boolean> => {
+  if (!token) {
     return false;
   }
 
   let data: Token;
 
   try {
-    data = await decrypt(body.token);
+    data = await decrypt(token);
   } catch (e) {
     return false;
   }
