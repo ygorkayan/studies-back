@@ -38,14 +38,13 @@ export const putQuestion = async (req: Request) => {
     body = await req.json();
   } catch (error) {
     return {
-      status: 500,
-      body: "Failed to parse request body",
+      status: 400,
+      body: "Invalid JSON body",
     };
   }
 
   const oldQuestion = result.results[0].question as string;
   const oldAnswer = result.results[0].answer as string;
-  const oldController = result.results[0].controller as number;
 
   const newQuestion = body?.question ?? oldQuestion;
   const newAnswer = body?.answer ?? oldAnswer;
@@ -55,7 +54,7 @@ export const putQuestion = async (req: Request) => {
 
   if (bodyController === "correct") {
     newController += 1;
-  } else if (bodyController === "incorrect" && oldController > 0) {
+  } else if (bodyController === "incorrect" && newController > 0) {
     newController -= 1;
   }
 
