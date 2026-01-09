@@ -77,3 +77,41 @@ export const putQuestion = async (req: Request) => {
     };
   }
 };
+
+export const postQuestion = async (req: Request) => {
+  let body: Record<string, any> | null;
+
+  try {
+    body = await req.json();
+  } catch (error) {
+    return {
+      status: 400,
+      body: "Invalid JSON body",
+    };
+  }
+
+  const question = body?.question;
+  const answer = body?.answer;
+
+  if (!question || !answer) {
+    return {
+      status: 400,
+      body: "Missing question or answer",
+    };
+  }
+
+  const query = "INSERT INTO flash_cards (question, answer) VALUES (?, ?)";
+
+  const insert = await env.studies_back.prepare(query).bind(question, answer).all();
+
+  if (insert.success) {
+    return {
+      status: 201,
+    };
+  } else {
+    return {
+      status: 500,
+      body: "Failed to create question",
+    };
+  }
+};

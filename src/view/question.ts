@@ -1,5 +1,5 @@
 import { checkAuthorization } from "../helpers/checkAuthorization";
-import { getQuestion, putQuestion } from "../controller/question";
+import { getQuestion, postQuestion, putQuestion } from "../controller/question";
 
 export const question = async (method: string, req: Request) => {
   try {
@@ -12,11 +12,15 @@ export const question = async (method: string, req: Request) => {
     return { status: 401, body: "Unauthorized" };
   }
 
-  if (method === "POST") {
+  if (method === "GET") {
     return getQuestion();
   }
 
   if (method === "PUT") {
     return putQuestion(req);
+  }
+
+  if (method === "POST") {
+    return postQuestion(req);
   }
 };
