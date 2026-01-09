@@ -90,8 +90,8 @@ export const postQuestion = async (req: Request) => {
     };
   }
 
-  const question = body?.question;
-  const answer = body?.answer;
+  const question = body?.question?.trim();
+  const answer = body?.answer?.trim();
 
   if (!question || !answer) {
     return {
