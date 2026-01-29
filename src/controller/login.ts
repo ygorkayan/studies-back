@@ -67,12 +67,12 @@ export const checkToken = async (req: Request) => {
   if (isValid) {
     return {
       status: 200,
-      body: "valid credentials",
+      body: "Valid credentials",
     };
   }
 
   return {
     status: 401,
-    body: "invalid credentials",
+    body: "Invalid credentials",
   };
 };
