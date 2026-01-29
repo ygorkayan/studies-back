@@ -5,7 +5,7 @@ export const routeHandler = async (req: Request) => {
   const pathname = new URL(req.url).pathname;
   const method = req.method;
 
-  const methodsAllowedInLogin = ["POST"];
+  const methodsAllowedInLogin = ["POST", "GET"];
   if (pathname.startsWith("/login") && methodsAllowedInLogin.includes(method)) {
     return login(method, req);
   }
