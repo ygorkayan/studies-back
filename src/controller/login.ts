@@ -1,6 +1,7 @@
 import { env } from "cloudflare:workers";
 import { encrypt, encryptPassword } from "../helpers/crypto";
 import { Login, Token } from "../helpers/types";
+import { checkAuthorization } from "../helpers/checkAuthorization";
 
 const FIVE_HOURS_IN_MS = 5 * 60 * 60 * 1000;
 
@@ -58,4 +59,20 @@ export const checkLogin = async (req: Request) => {
       body: "Failed to generate token",
     };
   }
+};
+
+export const checkToken = async (req: Request) => {
+  const isValid = await checkAuthorization(req.headers.get("token"));
+
+  if (isValid) {
+    return {
+      status: 200,
+      body: "Valid credentials",
+    };
+  }
+
+  return {
+    status: 401,
+    body: "Invalid credentials",
+  };
 };
