@@ -76,7 +76,7 @@ export class MyWorkflow extends WorkflowEntrypoint<Env, Params> {
 }
 
 const corsHeaders = (origin: string) => {
-  const allowedOrigins = ["http://localhost:5173", "https://studies-front.pages.dev"];
+  const allowedOrigins = ["http://localhost:5173", "https://studies-back.ygorkayan.com"];
 
   const headers: Record<string, string> = {
     "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS",
